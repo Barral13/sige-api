@@ -1,30 +1,78 @@
 import prisma from "../prisma/PrismaClient.js";
 
-export async function createDepartment(data) {
-    return await prisma.department.create({
-        data,
-    });
-}
+export class DepartmentService {
+    async createDepartment({ name }) {
+        if (!name) {
+            throw new Error("O campo 'name' é obrigatório.");
+        }
+        return await prisma.department.create({
+            data: { name },
+            select: {
+                id: true,
+                name: true,
+                createdAt: true,
+                updatedAt: true
+            }
+        });
+    }
 
-export async function getAllDepartments() {
-    return await prisma.department.findMany();
-}
+    async getAllDepartments() {
+        return await prisma.department.findMany({
+            select: {
+                id: true,
+                name: true,
+                createdAt: true,
+                updatedAt: true
+                // positions removido
+            }
+        });
+    }
 
-export async function getDepartmentById(id) {
-    return await prisma.department.findUnique({
-        where: { id },
-    });
-}
+    async getDepartmentById(id) {
+        if (!id) {
+            throw new Error("O parâmetro 'id' é obrigatório.");
+        }
+        return await prisma.department.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                name: true,
+                createdAt: true,
+                updatedAt: true
+                // positions removido
+            }
+        });
+    }
 
-export async function updateDepartment(id, data) {
-    return await prisma.department.update({
-        where: { id },
-        data,
-    });
-}
+    async updateDepartment(id, { name }) {
+        if (!id) {
+            throw new Error("O parâmetro 'id' é obrigatório.");
+        }
+        const data = {};
+        if (name !== undefined) data.name = name;
 
-export async function deleteDepartment(id) {
-    return await prisma.department.delete({
-        where: { id },
-    });
+        return await prisma.department.update({
+            where: { id },
+            data,
+            select: {
+                id: true,
+                name: true,
+                createdAt: true,
+                updatedAt: true
+            }
+        });
+    }
+
+    async deleteDepartment(id) {
+        if (!id) {
+            throw new Error("O parâmetro 'id' é obrigatório.");
+        }
+        return await prisma.department.delete({
+            where: { id },
+            select: {
+                id: true,
+                name: true
+            }
+        });
+    }
 }
