@@ -35,3 +35,5 @@ Thumbs.db  # Windows
 # Otros archivos ignorados generalmente
 *.env.local
 *.env.*.local
+
+/src/generated/prisma
