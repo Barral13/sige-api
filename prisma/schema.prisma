@@ -13,9 +13,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Perfil {
+enum Profile {
   SUPER_ADMIN
-  CEO
+  DIRETOR_EXECUTIVO
   GERENTE
   COORDENADOR
   SUPERVISOR
@@ -23,7 +23,7 @@ enum Perfil {
   TECNICO
 }
 
-enum NivelCargo {
+enum PositionLevel {
   JUNIOR
   PLENO
   SENIOR
@@ -31,37 +31,36 @@ enum NivelCargo {
   APRENDIZ
 }
 
-model Departamento {
+model Department {
   id              Int           @id @default(autoincrement())
-  nome            String
-  cargos          Cargo[]
-  empregados      Empregado[]   
-  criadoEm        DateTime      @default(now())
-  atualizadoEm    DateTime      @updatedAt
+  name            String
+  positions       Position[]
+  employees       Employee[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }
 
-model Cargo {
+model Position {
   id              Int           @id @default(autoincrement())
-  nome            String
-  departamentoId  Int
-  departamento    Departamento  @relation(fields: [departamentoId], references: [id])
-  empregados      Empregado[]
-  criadoEm        DateTime      @default(now())
-  atualizadoEm    DateTime      @updatedAt
+  name            String
+  departmentId    Int
+  department      Department    @relation(fields: [departmentId], references: [id])
+  employees       Employee[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }
 
-model Empregado {
+model Employee {
   id              Int           @id @default(autoincrement())
-  nome            String
+  name            String
   email           String        @unique
   cpf             String        @unique
-  departamentoId  Int
-  departamento    Departamento  @relation(fields: [departamentoId], references: [id])
-  cargoId         Int
-  cargo           Cargo         @relation(fields: [cargoId], references: [id])
-  perfil          Perfil
-  nivel           NivelCargo
-  criadoEm        DateTime      @default(now())
-  atualizadoEm    DateTime      @updatedAt
+  departmentId    Int
+  department      Department    @relation(fields: [departmentId], references: [id])
+  positionId      Int
+  position        Position      @relation(fields: [positionId], references: [id])
+  profile         Profile
+  level           PositionLevel
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }
-

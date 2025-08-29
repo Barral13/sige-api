@@ -1,7 +1,15 @@
-import app from "./app.js";
+import express from 'express';
+import departmentRouter from './routes/departmentRoutes.js';
 
-const PORT = process.env.PORT || 3000;
+const app = express();
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// Define routes
+app.use('/api/departments', departmentRouter);
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
 });
+
